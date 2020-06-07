@@ -1,8 +1,10 @@
 package com.example.switter.controller;
 
 import com.example.switter.domain.Message;
+import com.example.switter.domain.User;
 import com.example.switter.repository.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import org.springframework.stereotype.Controller;
 
@@ -33,8 +35,12 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        Message message = new Message(text, tag);
+    public String add(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag, Map<String, Object> model
+    ) {
+        Message message = new Message(text, tag, user);
 
         messageRepo.save(message);
 
